@@ -1,7 +1,7 @@
 # Artificial Intelligence Laboratory - Summer 2025
 ![GitHub repo size](https://img.shields.io/github/repo-size/Biplob-592/Artificial-Intelligence-UIU)
 ![GitHub contributors](https://img.shields.io/github/contributors/Biplob-592/Artificial-Intelligence-UIU)
-![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/Biplob-592/Artificial-Intelligence-UIU)
+![Profile views](https://komarev.com/ghpvc/?username=Biplob-592&repo=Artificial-Intelligence-UIU&color=blue)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Biplob-592/Artificial-Intelligence-UIU)
 
 Hello, Everyone!
