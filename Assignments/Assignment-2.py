@@ -1,0 +1,109 @@
+# A* Search Algorithm Implementation for Romania Road Map
+import heapq
+
+# Romania road map: Each city with its neighbours and road distances
+romania_map = {
+    'Arad': {'Zerind': 75, 'Timisoara': 118, 'Sibiu': 140},
+    'Zerind': {'Arad': 75, 'Oradea': 71},
+    'Timisoara': {'Arad': 118, 'Lugoj': 111},
+    'Sibiu': {'Arad': 140, 'Oradea': 151, 'Fagaras': 99, 'Rimnicu Vilcea': 80},
+    'Oradea': {'Zerind': 71, 'Sibiu': 151},
+    'Lugoj': {'Timisoara': 111, 'Mehadia': 70},
+    'Fagaras': {'Sibiu': 99, 'Bucharest': 211},
+    'Rimnicu Vilcea': {'Sibiu': 80, 'Pitesti': 97, 'Craiova': 146},
+    'Mehadia': {'Lugoj': 70, 'Drobeta': 75},
+    'Drobeta': {'Mehadia': 75, 'Craiova': 120},
+    'Craiova': {'Drobeta': 120, 'Rimnicu Vilcea': 146, 'Pitesti': 138},
+    'Pitesti': {'Rimnicu Vilcea': 97, 'Craiova': 138, 'Bucharest': 101},
+    'Bucharest': {'Fagaras': 211, 'Pitesti': 101, 'Giurgiu': 90, 'Urziceni': 85},
+    'Giurgiu': {'Bucharest': 90},
+    'Urziceni': {'Bucharest': 85, 'Hirsova': 98, 'Vaslui': 142},
+    'Hirsova': {'Urziceni': 98, 'Eforie': 86},
+    'Eforie': {'Hirsova': 86},
+    'Vaslui': {'Urziceni': 142, 'Iasi': 92},
+    'Iasi': {'Vaslui': 92, 'Neamt': 87},
+    'Neamt': {'Iasi': 87}
+}
+
+# My student ID
+student_id = "0112230592"
+
+# Calculating the special value for Bucharest's heuristic
+last_two_digits = int(student_id[-2:])
+bucharest_h_value = (last_two_digits ** 2) + 1
+
+# Heuristic table 
+heuristics = {
+    'Arad': 366,
+    'Bucharest': bucharest_h_value,
+    'Craiova': 160,
+    'Drobeta': 242,
+    'Eforie': 161,
+    'Fagaras': 176,
+    'Giurgiu': 77,
+    'Hirsova': 151,
+    'Iasi': 226,
+    'Lugoj': 244,
+    'Mehadia': 241,
+    'Neamt': 234,
+    'Oradea': 380,
+    'Pitesti': 100,
+    'Rimnicu Vilcea': 193,
+    'Sibiu': 253,
+    'Timisoara': 329,
+    'Urziceni': 80,
+    'Vaslui': 199,
+    'Zerind': 374
+}
+
+
+class Node:
+    def __init__(self, city, cost, parent=None):
+        self.city = city
+        self.cost = cost
+        self.parent = parent
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+
+def heuristic(node, goal):
+    return heuristics.get(node.city, 0)
+
+
+def astar_search(graph, start, goal):
+    front = []
+    visited = set()
+    heapq.heappush(front, (start.cost + heuristic(start, goal), start))
+    while front:
+        _, current = heapq.heappop(front)
+        if current.city == goal.city:
+            path = []
+            while current:
+                path.append(current.city)
+                current = current.parent
+            return path[::-1]
+        visited.add(current.city)
+        for neighbor, dist in graph[current.city].items():
+            if neighbor not in visited:
+                total_cost = current.cost + dist
+                heapq.heappush(front, (total_cost + heuristic(Node(neighbor,
+                               total_cost), goal), Node(neighbor, total_cost, current)))
+    return None
+
+
+# Determining SL_NO from my student ID
+SL_NO = (int(student_id) % 10) + 1
+if SL_NO == 3:
+    start_city = 'Lugoj'
+    goal_city = 'Neamt'
+
+start = Node(start_city, 0)
+goal = Node(goal_city, 0)
+result_path = astar_search(romania_map, start, goal)
+
+print("Bucharest heuristic value :", bucharest_h_value)
+if result_path:
+    print("Shortest Path:", result_path)
+else:
+    print("No Path available")
